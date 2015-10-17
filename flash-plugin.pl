@@ -1,11 +1,8 @@
 use Thread qw(yield async);
 use Purple;
-use IO::Socket::INET;
+use Time::HiRes qw (sleep);
 
 ###
-our $exitapp = 0;
-our $unread = 0;
-
 %PLUGIN_INFO = (
 	perl_api_version => 2,
 	name => "FlashyLightPlugin2",
@@ -22,44 +19,47 @@ sub plugin_init {
 	return %PLUGIN_INFO;
 }
 sub on {
-	Purple::Debug::info("FlashyLightPlugin2", "LEDPlugin on: $devicepowerlevel \n");
+        my $devicepath=getdevicepath();
+        my $devicepowerlevel="$devicepath/power/level";
 	open OUTPUT, ">$devicepowerlevel";
 	print OUTPUT "on";
 	close OUTPUT;
 }
 
 sub off {
-	Purple::Debug::info("FlashyLightPlugin2", "LEDPlugin off: $devicepowerlevel \n");
+	my $devicepath=getdevicepath();
+	my $devicepowerlevel="$devicepath/power/level";
         open OUTPUT, ">$devicepowerlevel";
         print OUTPUT "auto";
         close OUTPUT;
 }
 
-
-#$thr = async {
-$thr = async {
-	Purple::Debug::info("FlashyLightPlugin2", "LEDPlugin thread start\n");
-	for ($exitapp;$exitapp='-1';$exitapp) 
-	{
-		sleep 1000;
-		Purple::Debug::info("FlashyLightPlugin2", "LEDPlugin thread: $unread\n");
-		if($unread > 0) {
-			on();
-			sleep 1000;
-			off();
-			sleep 1000;
-		}
-	}
-};
-
-
+sub getdevicepath {
+        our $devicepath=`udevadm trigger -v -a idVendor=09da -a idProduct=0006`;
+        chomp($devicepath);
+	return $devicepath;
+}
 
 sub plugin_load {
 	my $plugin = shift;
+
+	async {
+		for ($exitapp; $exitapp > -1; $exitapp)
+		{
+			Time::HiRes::sleep (0.1);
+			my $unread = total_unread_count();
+			if(total_unread_count() > 0) {
+			on();
+			Time::HiRes::sleep (0.5);
+			off();
+			Time::HiRes::sleep (0.5);
+                }
+        } 
+};
+
         our $devicepath=`udevadm trigger -v -a idVendor=09da -a idProduct=0006`;
 	chomp($devicepath);
         our $devicepowerlevel="$devicepath/power/level";
-        Purple::Debug::info("FlashyLightPlugin2", "LEDPlugin device path: $devicepowerlevel \n");
 
 	my $conv_handle = Purple::Conversations::get_handle();
 	
@@ -85,13 +85,7 @@ sub total_unread_count {
 }
 
 sub update_unread_count {
-	our $unread = total_unread_count();
-#	if($unread > 0) { 
-#		on();
-#	}
-#	if($unread == 0) {
-#		off();
-#	}
+	my $unread = total_unread_count();
 }
 
 sub plugin_unload {
