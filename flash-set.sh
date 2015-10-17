@@ -1,6 +1,6 @@
 #!/bin/bash
-dVendor=$(cat /etc/pidgin-flashy.conf | grep 'Vendor' | cut -d '=' -f2 )
-dProduct=$(cat /etc/pidgin-flashy.conf | grep 'Product' | cut -d '=' -f2 )
+dVendor=$(cat /etc/pidgin-flashy.conf | grep -v -e '^#' | grep 'Vendor' | cut -d '=' -f2 )
+dProduct=$(cat /etc/pidgin-flashy.conf | grep -v -e '^#' | grep 'Product' | cut -d '=' -f2 )
 devpath=$(ls /sys/bus/usb/devices/*/idVendor | xargs grep -rl $dVendor | awk -F '/idVendor' '{ print $1 "/idProduct" }' | xargs grep -rl $dProduct | awk -F '/idProduct' '{ print $1 }' )
 
 chgrp led $devpath/power/level
