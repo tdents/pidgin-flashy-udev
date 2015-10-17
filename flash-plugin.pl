@@ -2,8 +2,11 @@ use Thread qw(yield async);
 use Purple;
 use Time::HiRes qw (sleep);
 
-our $idVendor='09da';
-our $idProduct='0006';
+#`udevadm trigger -v -a idVendor=$idVendor -a idProduct=$idProduct`;
+our $idVendor=`cat /etc/pidgin-flashy.conf | grep 'dVendor' | cut -d '=' -f2`;
+chomp($idVendor);
+our $idProduct=`cat /etc/pidgin-flashy.conf | grep 'dProduct' | cut -d '=' -f2`;
+chomp($idProduct);
 
 ###
 %PLUGIN_INFO = (
