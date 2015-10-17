@@ -2,6 +2,13 @@
 Для работы необходимо добавить правило udev:<br />
 <br >
 ACTION=="add", SUBSYSTEM=="usb",<br />
-ATTRS{idVendor}=="", \ #insert id here <br />
-ATTRS{idProduct}=="", \ #insert id here <br />
+ATTRS{idVendor}=="", \ #впишите ID устойства <br />
+ATTRS{idProduct}=="", \ #впишите ID устройста <br />
 MODE:="0664", GROUP:="led",NAME="pidgin-led", SYMLINK+="pidgin-led", RUN+="/etc/flash-set.sh"<br />
+
+После чего файл flash-set.sh разместить в директории /etc. Там же создать конфиг pidgin-flashy.conf. 
+В нем указать:
+dVendor=ID
+dProduct=ID
+
+ID можно найти в lsusb.
