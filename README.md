@@ -1,9 +1,7 @@
-# pidgin-flashy-udev
-udev version for flashing
-Another one version of this..
-Firsh - add rule to udev:
-#LED flash
-ACTION=="add", SUBSYSTEM=="usb", \
-ATTRS{idVendor}=="", \ #insert id here
-ATTRS{idProduct}=="", \ #insert id here
-MODE:="0664", GROUP:="led", NAME="pidgin-led", SYMLINK+="pidgin-led", RUN+="/etc/flash-set.sh"
+#Версия для udev <br />
+Для работы необходимо добавить правило udev:<br />
+<br >
+ACTION=="add", SUBSYSTEM=="usb",<br />
+ATTRS{idVendor}=="", \ #insert id here <br />
+ATTRS{idProduct}=="", \ #insert id here <br />
+MODE:="0664", GROUP:="led",NAME="pidgin-led", SYMLINK+="pidgin-led", RUN+="/etc/flash-set.sh"<br />
