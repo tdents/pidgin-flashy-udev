@@ -2,6 +2,9 @@ use Thread qw(yield async);
 use Purple;
 use Time::HiRes qw (sleep);
 
+our $idVendor='09da';
+our $idProduct='0006';
+
 ###
 %PLUGIN_INFO = (
 	perl_api_version => 2,
@@ -35,15 +38,15 @@ sub off {
 }
 
 sub getdevicepath {
-        our $devicepath=`udevadm trigger -v -a idVendor=09da -a idProduct=0006`;
+        our $devicepath=`udevadm trigger -v -a idVendor=$idVendor -a idProduct=$idProduct`;
         chomp($devicepath);
 	return $devicepath;
 }
 
 sub plugin_load {
 	my $plugin = shift;
-
-	async {
+	
+	$t=async {
 		for ($exitapp; $exitapp > -1; $exitapp)
 		{
 			Time::HiRes::sleep (0.1);
@@ -56,10 +59,6 @@ sub plugin_load {
                 }
         } 
 };
-
-        our $devicepath=`udevadm trigger -v -a idVendor=09da -a idProduct=0006`;
-	chomp($devicepath);
-        our $devicepowerlevel="$devicepath/power/level";
 
 	my $conv_handle = Purple::Conversations::get_handle();
 	
