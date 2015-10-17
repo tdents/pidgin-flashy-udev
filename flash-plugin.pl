@@ -10,7 +10,7 @@ chomp($idProduct);
 ###
 %PLUGIN_INFO = (
 	perl_api_version => 2,
-	name => "FlashyLightPlugin2",
+	name => "FlashyLightPlugin",
 	version => "1.0",
 	summary => "Flashing LED connected to USB port",
 	description => "Changes value in /var/flash/status",
