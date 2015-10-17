@@ -2,9 +2,9 @@ use Thread qw(yield async);
 use Purple;
 use Time::HiRes qw (sleep);
 
-our $idVendor=`cat /etc/pidgin-flashy.conf | grep 'dVendor' | cut -d '=' -f2`;
+our $idVendor=`cat /etc/pidgin-flashy.conf | grep -v -e '^#' | grep 'dVendor' | cut -d '=' -f2`;
 chomp($idVendor);
-our $idProduct=`cat /etc/pidgin-flashy.conf | grep 'dProduct' | cut -d '=' -f2`;
+our $idProduct=`cat /etc/pidgin-flashy.conf | grep -v -e '^#' | grep 'dProduct' | cut -d '=' -f2`;
 chomp($idProduct);
 
 ###
