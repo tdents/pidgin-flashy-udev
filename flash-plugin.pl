@@ -25,18 +25,22 @@ sub plugin_init {
 }
 sub on {
         my $devicepath=getdevicepath();
-        my $devicepowerlevel="$devicepath/power/level";
-	open OUTPUT, ">$devicepowerlevel";
-	print OUTPUT "on";
-	close OUTPUT;
+        if(lenght($devicepath) > 0) {
+        	my $devicepowerlevel="$devicepath/power/level";
+		open OUTPUT, ">$devicepowerlevel";
+		print OUTPUT "on";
+		close OUTPUT;
+        }
 }
 
 sub off {
 	my $devicepath=getdevicepath();
-	my $devicepowerlevel="$devicepath/power/level";
-        open OUTPUT, ">$devicepowerlevel";
-        print OUTPUT "auto";
-        close OUTPUT;
+	if(lenght($devicepath) > 0) {
+		my $devicepowerlevel="$devicepath/power/level";
+		open OUTPUT, ">$devicepowerlevel";
+        	print OUTPUT "auto";
+        	close OUTPUT;
+	}
 }
 
 sub getdevicepath {
