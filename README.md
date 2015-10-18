@@ -11,16 +11,16 @@ idProduct = 0006<br />
 <br />
 2. Добавить правило udev:<br />
 <br />
-#LED flash<br />
-ACTION=="add", \<br />
-SUBSYSTEM=="usb", \<br />
-ATTRS{idVendor}=="09da", \<br />
-ATTRS{idProduct}=="0006", \<br />
-MODE:="0664", \<br />
-GROUP:="led", \<br />
-NAME="pidgin-led", \<br />
-SYMLINK+="pidgin-led"<br />
-RUN+="/etc/flash-set.sh"<br />
+\#LED flash <br />
+ACTION=="add", \ <br />
+SUBSYSTEM=="usb", \ <br />
+ATTRS{idVendor}=="09da", \ <br />
+ATTRS{idProduct}=="0006", \ <br />
+MODE:="0664", \ <br />
+GROUP:="led", \ <br />
+NAME="pidgin-led", \ <br />
+SYMLINK+="pidgin-led",\ <br />
+RUN+="/etc/flash-set.sh" <br />
 <br />
 Соответственно изменить в правиле idVendor и idProduct на устройство из системы (lsusb)<br />
 <br />
