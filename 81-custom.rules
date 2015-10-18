@@ -1,8 +1,8 @@
 #LED flash
 ACTION=="add", \
 SUBSYSTEM=="usb", \
-ATTRS{idVendor}=="0458", \
-ATTRS{idProduct}=="002e", \
+ATTRS{idVendor}=="09da", \
+ATTRS{idProduct}=="0006", \
 MODE:="0664", \
 GROUP:="led", \
 NAME="pidgin-led", \
