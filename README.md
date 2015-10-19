@@ -9,7 +9,8 @@ Bus 008 Device 003: ID 09da:0006 A4 Tech Co., Ltd Optical Mouse WOP-35 / Trust 4
 idVendor = 09da<br />
 idProduct = 0006<br />
 <br />
-2. Добавить правило udev:<br />
+2. Создать группу led и добавить в нее своего пользователя.
+3. Добавить правило udev:<br />
 <br />
 \#LED flash <br />
 ACTION=="add", \ <br />
@@ -24,11 +25,11 @@ RUN+="/etc/flash-set.sh" <br />
 <br />
 Соответственно изменить в правиле idVendor и idProduct на устройство из системы (lsusb)<br />
 <br />
-3. Разместить 2 файла flash-set.sh и pidgin-flashy.conf в /etc/<br />
+4. Разместить 2 файла flash-set.sh и pidgin-flashy.conf в /etc/<br />
 <br />
-4. В файле pidgin-flashy.conf изменить idVendor и idProduct на те же значения из lsusb<br />
+5. В файле pidgin-flashy.conf изменить idVendor и idProduct на те же значения из lsusb<br />
 <br />
-5. Установить плагин, разместив файл flash-plugin.pl в директорию ~/.purple/plugin<br />
+6. Установить плагин, разместив файл flash-plugin.pl в директорию ~/.purple/plugin<br />
 <br />
 После чего перезапустить Pidgin и, если не включен, то включить плагин в Средства > Модули > FlashyLightPlugin.<br />
 <br />
