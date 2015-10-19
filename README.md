@@ -25,7 +25,7 @@ RUN+="/etc/flash-set.sh" <br />
 <br />
 Соответственно изменить в правиле idVendor и idProduct на устройство из системы (lsusb)<br />
 <br />
-4. Разместить 2 файла flash-set.sh и pidgin-flashy.conf в /etc/<br />
+4. Разместить 2 файла flash-set.sh и pidgin-flashy.conf в /usr/sbin и /etc соответственно.<br />
 <br />
 5. В файле pidgin-flashy.conf изменить idVendor и idProduct на те же значения из lsusb<br />
 <br />
