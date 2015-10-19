@@ -9,8 +9,8 @@ Bus 008 Device 003: ID 09da:0006 A4 Tech Co., Ltd Optical Mouse WOP-35 / Trust 4
 idVendor = 09da<br />
 idProduct = 0006<br />
 <br />
-2. Создать группу led и добавить в нее своего пользователя.
-3. Добавить правило udev:<br />
+2. Создать группу led и добавить в нее своего пользователя. <br />
+3. Добавить правило udev: <br />
 <br />
 \#LED flash <br />
 ACTION=="add", \ <br />
