@@ -7,4 +7,4 @@ MODE:="0664", \
 GROUP:="led", \
 NAME="pidgin-led", \
 SYMLINK+="pidgin-led"
-RUN+="/etc/flash-set.sh"
+RUN+="/usr/sbin/flash-set.sh"
