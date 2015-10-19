@@ -1,19 +1,27 @@
-use Thread qw(yield async);
+use Thread;
+use threads;
+use threads::shared;
 use Purple;
 use Time::HiRes qw (sleep);
 
-our $idVendor=`cat /etc/pidgin-flashy.conf | grep -v '^#' | grep 'dVendor' | cut -d '=' -f2`;
-chomp($idVendor);
-our $idProduct=`cat /etc/pidgin-flashy.conf | grep -v '^#' | grep 'dProduct' | cut -d '=' -f2`;
-chomp($idProduct);
+$cfgfile='/etc/pidgin-flashy.conf';
+open CONFIG, "$cfgfile" or die "Program stopping, couldn't open the configuration file '$config_file'.\n";
+
+while (<CONFIG>) {
+    chomp; s/#.*//; s/^\s+//; s/\s+$//; next unless length;
+    my ($var, $value) = split(/\s*=\s*/, $_, 2);
+    $User_Preferences{$var} = $value;
+}
+our $idVendor = $User_Preferences{idVendor};
+our $idProduct = $User_Preferences{idProduct};
 
 ###
 %PLUGIN_INFO = (
 	perl_api_version => 2,
-	name => "FlashyLightPlugin2",
+	name => "FlashyLightPlugin",
 	version => "1.0",
 	summary => "Flashing LED connected to USB port",
-	description => "Changes value in /var/flash/status",
+	description => "USB Flashing plugin for UDEV",
 	author => "Me",
 	url => "http://localhost/",
 	load => "plugin_load",
@@ -38,30 +46,32 @@ sub off {
 }
 
 sub startflash {
-	async {
+	$t = Thread->new( sub {
 		our $devicepath=`udevadm trigger -v -a idVendor=$idVendor -a idProduct=$idProduct`;
 		chomp($devicepath);
-		Purple::Debug::info("FlashyLightPlugin", "LEDPlugin async start device: $devicepath\n");
+		Purple::Debug::info("FlashyLightPlugin", "LEDPlugin thread start device: $devicepath\n");
 		if(!$devicepath == '')
-		{
+			{
 			our $devicepowerlevel="$devicepath/power/level";
 			for ($exitapp; total_unread_count() > 0; $exitapp)
-			{
+				{
 				$unread = total_unread_count();
-				Purple::Debug::info("FlashyLightPlugin", "LEDPlugin cycle: $unread\n");
+				Purple::Debug::info("FlashyLightPlugin", "LEDPlugin cycle unread messages: $unread\n");
 				on();
 				Time::HiRes::sleep (0.5);
 				off();
 				Time::HiRes::sleep (0.5);
-		        }
-		}	
+			        }
+			}
 		Purple::Debug::info("FlashyLightPlugin", "LEDPlugin exit cycle\n");
-	}
+		}
+	);
 };
 
 sub plugin_load {
         my $plugin = shift;
-
+	our $threads=0;
+	our $max_threads=1;
 	my $conv_handle = Purple::Conversations::get_handle();
 	
 	Purple::Signal::connect($conv_handle, "received-im-msg", $plugin, \&update_unread_count, '');
@@ -69,6 +79,7 @@ sub plugin_load {
 	Purple::Signal::connect($conv_handle, "conversation-updated", $plugin, \&update_unread_count, '');
 	Purple::Signal::connect($conv_handle, "conversation-created", $plugin, \&update_unread_count, '');
 	Purple::Signal::connect($conv_handle, "deleting-conversation", $plugin, \&update_unread_count, '');
+	
 }
 
 sub total_unread_count {
@@ -85,8 +96,18 @@ sub total_unread_count {
 }
 
 sub update_unread_count {
+	$count=0;
 	my $unread = total_unread_count();
-	if($unread > 0) { startflash(); };
+	if($unread = 1) {
+		for my $thr ( threads->list() ) {
+			if($thr->tid) { $count++; 
+				if ($thr->is_joinable ) { $thr->join(); }
+			}
+		}
+
+		Purple::Debug::info("FlashyLightPlugin", "LEDPlugin threads: $count\n");		
+	if($count < 1) { startflash(); }
+	}
 }
 
 sub plugin_unload {
