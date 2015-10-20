@@ -12,5 +12,4 @@ chmod "664" $devpath/power/control
 chmod "664" $devpath/power/autosuspend_delay_ms
 chmod "664" $devpath/power/autosuspend
 echo 0 > $devpath/power/autosuspend_delay_ms
-echo auto > $devpath/power/level
 fi
