@@ -3,8 +3,7 @@ ACTION=="add", \
 SUBSYSTEM=="usb", \
 ATTRS{idVendor}=="09da", \
 ATTRS{idProduct}=="0006", \
-MODE:="0664", \
-GROUP:="led", \
-NAME="pidgin-led", \
-SYMLINK+="pidgin-led"
-RUN+="/usr/sbin/flash-set.sh"
+MODE="0664", \
+GROUP="led", \
+RUN+="/usr/bin/flash-set.sh", \
+TEST=="power/level", ATTR{power/control}="auto"
